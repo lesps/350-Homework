@@ -216,7 +216,6 @@ public class CalculateDistanceTraveledTest {
 	
 	@Test
 	public void testInvalidGPXtrkptLattitudePosReturnsZeroBasic(){
-		ptsTest = new ArrayList<GPXtrkpt>();
 		ptsTest.add(new GPXtrkpt(91, 150, new Date()));
 		ArrayList<GPXtrkseg> single = new ArrayList<GPXtrkseg>();
 		single.add(new GPXtrkseg(ptsTest));
@@ -227,57 +226,116 @@ public class CalculateDistanceTraveledTest {
 	
 	@Test
 	public void testInvalidGPXtrkptLattitudePosReturnZeroStandard(){
-		
+		ptsTest.add(new GPXtrkpt(91,150,new Date()));
+		segs.add(new GPXtrkseg(ptsTest));
+		std = new GPXtrk("Track", segs);
+		assertTrue("The addition of a GPXtrkseg with an invalid positive lattitude should not affect distance",
+				GPXcalculator.calculateDistanceTraveled(std)==65);
 	}
 	
 	@Test
 	public void testInvalidGPXtrkptLattitudePosReturnZeroAdvanced(){
-		
+		ptsTest.add(new GPXtrkpt(91,150, new Date()));
+		segs = createGPXtrkseg(5);
+		GPXtrk trk = new GPXtrk("Track", segs);
+		double distance = GPXcalculator.calculateDistanceTraveled(trk);
+		segs.add(new GPXtrkseg(ptsTest));
+		trk = new GPXtrk("Track", segs);
+		assertTrue("The addition of a seg with an invalid positive lattitude should not change the distance", 
+				distance==GPXcalculator.calculateDistanceTraveled(trk));
 	}
 	
 	@Test
 	public void testInvalidGPXtrkptLattitudeNegReturnZeroBasic(){
-		
+		ptsTest.add(new GPXtrkpt(-91, 150, new Date()));
+		ArrayList<GPXtrkseg> single = new ArrayList<GPXtrkseg>();
+		single.add(new GPXtrkseg(ptsTest));
+		GPXtrk trk = new GPXtrk("Track", single);
+		assertTrue("Segment with invalid negative lattitude should return zero", 
+				GPXcalculator.calculateDistanceTraveled(trk)==0);
 	}
 	
 	@Test
 	public void testInvalidGPXtrkptLattitudeNegReturnZeroStandard(){
-		
+		ptsTest.add(new GPXtrkpt(-91,150,new Date()));
+		segs.add(new GPXtrkseg(ptsTest));
+		std = new GPXtrk("Track", segs);
+		assertTrue("The addition of a GPXtrkseg with invalid negative lattitude should not affect distance",
+				GPXcalculator.calculateDistanceTraveled(std)==65);
 	}
 	
 	@Test
 	public void testInvalidGPXtrkptLattitudeNegReturnZeroAdvanced(){
-		
+		ptsTest.add(new GPXtrkpt(-91,150, new Date()));
+		segs = createGPXtrkseg(5);
+		GPXtrk trk = new GPXtrk("Track", segs);
+		double distance = GPXcalculator.calculateDistanceTraveled(trk);
+		segs.add(new GPXtrkseg(ptsTest));
+		trk = new GPXtrk("Track", segs);
+		assertTrue("The addition of a seg with an invalid point should not change the distance", 
+				distance==GPXcalculator.calculateDistanceTraveled(trk));
 	}
 	
 	@Test
 	public void testInvalidGPXtrkptLongitudePosReturnZeroBasic(){
-		
+		ptsTest.add(new GPXtrkpt(80, 181, new Date()));
+		ArrayList<GPXtrkseg> single = new ArrayList<GPXtrkseg>();
+		single.add(new GPXtrkseg(ptsTest));
+		GPXtrk trk = new GPXtrk("Track", single);
+		assertTrue("Segment with invalid positive longitude should return zero", 
+				GPXcalculator.calculateDistanceTraveled(trk)==0);
 	}
 	
 	@Test
 	public void testInvalidGPXtrkptLongitudePosReturnZeroStandard(){
-		
+		ptsTest.add(new GPXtrkpt(80,181,new Date()));
+		segs.add(new GPXtrkseg(ptsTest));
+		std = new GPXtrk("Track", segs);
+		assertTrue("The addition of a GPXtrkseg with invalid positive longitude should not affect distance",
+				GPXcalculator.calculateDistanceTraveled(std)==65);
 	}
 	
 	@Test
 	public void testInvalidGPXtrkptLongitudePosReturnZeroAdvanced(){
-		
+		ptsTest.add(new GPXtrkpt(80,181, new Date()));
+		segs = createGPXtrkseg(5);
+		GPXtrk trk = new GPXtrk("Track", segs);
+		double distance = GPXcalculator.calculateDistanceTraveled(trk);
+		segs.add(new GPXtrkseg(ptsTest));
+		trk = new GPXtrk("Track", segs);
+		assertTrue("The addition of a seg with an invalid point should not change the distance", 
+				distance==GPXcalculator.calculateDistanceTraveled(trk));
 	}
 	
 	@Test
 	public void testInvalidGPXtrkptLongitudeNegReturnZeroBasic(){
-		
+		ptsTest.add(new GPXtrkpt(80, -181, new Date()));
+		ArrayList<GPXtrkseg> single = new ArrayList<GPXtrkseg>();
+		single.add(new GPXtrkseg(ptsTest));
+		GPXtrk trk = new GPXtrk("Track", single);
+		assertTrue("Segment with invalid negative longitude should return zero", 
+				GPXcalculator.calculateDistanceTraveled(trk)==0);
 	}
 	
 	@Test
 	public void testInvalidGPXtrkptLongitudeNegReturnZeroStandard(){
-		
+		ptsTest.add(new GPXtrkpt(80,-181,new Date()));
+		segs.add(new GPXtrkseg(ptsTest));
+		std = new GPXtrk("Track", segs);
+		assertTrue("The addition of a GPXtrkseg with invalid negative longitude should not affect distance",
+				GPXcalculator.calculateDistanceTraveled(std)==65);
 	}
 	
 	@Test
 	public void testInvalidGPXtrkptLongitudeNegReturnZeroAdvanced(){
-		
+		ptsTest.add(new GPXtrkpt(80,-181, new Date()));
+		segs = createGPXtrkseg(5);
+		GPXtrk trk = new GPXtrk("Track", segs);
+		double distance = GPXcalculator.calculateDistanceTraveled(trk);
+		segs.add(new GPXtrkseg(ptsTest));
+		trk = new GPXtrk("Track", segs);
+		assertTrue("The addition of a seg with an invalid point should not change the distance", 
+				distance==GPXcalculator.calculateDistanceTraveled(trk));
 	}
 	
 	/**
