@@ -91,7 +91,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
-	public void testNullEntryDoesNotAffectDistance(){
+	public void testNullEntryDoesNotAffectDistanceAdvanced(){
 		ArrayList<GPXtrkseg> segs = createGPXtrkseg(5);
 		GPXtrk track = new GPXtrk("Track", segs);
 		double distance = GPXcalculator.calculateDistanceTraveled(track);
@@ -130,6 +130,18 @@ public class CalculateDistanceTraveledTest {
 		GPXtrk track = new GPXtrk("Track", segs);
 		assertTrue("Track seg with only a single point should return 0", 
 				GPXcalculator.calculateDistanceTraveled(track) == 0);
+	}
+	
+	@Test
+	public void testGPXtrksegWithSinglePointReturnsZeroDistanceAdvanced(){
+		ArrayList<GPXtrkseg> segs = createGPXtrkseg(5);
+		GPXtrk track = new GPXtrk("Track", segs);
+		double distance = GPXcalculator.calculateDistanceTraveled(track);
+		GPXtrkseg seg = new GPXtrkseg(createGPXtrkpt(1));
+		segs.add(seg);
+		track=new GPXtrk("Track", segs);
+		assertTrue("Addition of an empty seg should not affect total distance traveled",
+				distance==GPXcalculator.calculateDistanceTraveled(track));
 	}
 	
 	/**
@@ -177,7 +189,6 @@ public class CalculateDistanceTraveledTest {
 			double lattitude = genRandDoub(90);
 			double longitude = genRandDoub(180);
 			pts.add(new GPXtrkpt(lattitude, longitude, new Date()));
-			System.out.printf("Lattitude: %.2f    Longitude: %.2f\n", lattitude, longitude);
 		}
 		return pts;
 	}
