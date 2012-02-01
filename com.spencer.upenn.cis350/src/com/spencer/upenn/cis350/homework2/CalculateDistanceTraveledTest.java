@@ -12,6 +12,7 @@ import java.util.Date;
 public class CalculateDistanceTraveledTest {
 
 	GPXtrk std = null;
+	ArrayList<GPXtrkseg> segs = null;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -27,12 +28,12 @@ public class CalculateDistanceTraveledTest {
 		pts2.add(new GPXtrkpt(-80, -80, new Date()));
 		pts2.add(new GPXtrkpt(-60, -80, new Date()));
 		
-		//Point array of 5 dist
+		//Point array of 5 dist (test the square root functionality)
 		ArrayList<GPXtrkpt> pts3 = new ArrayList<GPXtrkpt>();
 		pts3.add(new GPXtrkpt(0, 0, new Date()));
 		pts3.add(new GPXtrkpt(3, 4, new Date()));
 		
-		ArrayList<GPXtrkseg> segs = new ArrayList<GPXtrkseg>();
+		segs = new ArrayList<GPXtrkseg>();
 		segs.add(new GPXtrkseg(pts1));
 		segs.add(new GPXtrkseg(pts2));
 		segs.add(new GPXtrkseg(pts3));
@@ -43,6 +44,7 @@ public class CalculateDistanceTraveledTest {
 	@After
 	public void tearDown() throws Exception {
 		std=null;
+		segs = null;
 	}
 
 	@Test
@@ -91,6 +93,14 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	public void testNullEntryDoesNotAffectDistanceStandard(){
+		segs.add(null);
+		std = new GPXtrk("Track", segs);
+		assertTrue("The addition of an empty seg should still have dist 65",
+				GPXcalculator.calculateDistanceTraveled(std)==65);
+	}
+	
+	@Test
 	public void testNullEntryDoesNotAffectDistanceAdvanced(){
 		ArrayList<GPXtrkseg> segs = createGPXtrkseg(5);
 		GPXtrk track = new GPXtrk("Track", segs);
@@ -102,7 +112,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
-	public void testEmptyGPXtrkptReturnsZeroBasic(){
+	public void testEmptyGPXtrksegReturnsZeroBasic(){
 		GPXtrkseg seg = new GPXtrkseg(new ArrayList<GPXtrkpt>());
 		ArrayList<GPXtrkseg> segs = new ArrayList<GPXtrkseg>();
 		segs.add(seg);
@@ -112,7 +122,15 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
-	public void testEmptyGPXtrkptReturnsZeroAdvanced(){
+	public void testEmptyGPXtrksegReturnsZeroStandard(){
+		segs.add(new GPXtrkseg(new ArrayList<GPXtrkpt>()));
+		std = new GPXtrk("Track", segs);
+		assertTrue("The addition of an empty seg should still have dist 65",
+				GPXcalculator.calculateDistanceTraveled(std)==65);
+	}
+	
+	@Test
+	public void testEmptyGPXtrksegReturnsZeroAdvanced(){
 		ArrayList<GPXtrkseg> segs = createGPXtrkseg(5);
 		GPXtrk track = new GPXtrk("Track", segs);
 		double distance = GPXcalculator.calculateDistanceTraveled(track);
@@ -133,6 +151,16 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	public void testGPXtrksegWithSinglePointReturnsZeroDistanceStandard(){
+		ArrayList<GPXtrkpt> pts = new ArrayList<GPXtrkpt>();
+		pts.add(new GPXtrkpt(50, 50, new Date()));
+		segs.add(new GPXtrkseg(pts));
+		std = new GPXtrk("Track", segs);
+		assertTrue("The addition of a seg with one point should still have dist 65",
+				GPXcalculator.calculateDistanceTraveled(std)==65);
+	}
+	
+	@Test
 	public void testGPXtrksegWithSinglePointReturnsZeroDistanceAdvanced(){
 		ArrayList<GPXtrkseg> segs = createGPXtrkseg(5);
 		GPXtrk track = new GPXtrk("Track", segs);
@@ -144,21 +172,28 @@ public class CalculateDistanceTraveledTest {
 				distance==GPXcalculator.calculateDistanceTraveled(track));
 	}
 	
-	/**
-	 * Create a GPXtrk with items of n size
-	 * @param n The number of points to generate
-	 * @return The GPXtrk
-	 */
-	
-	public ArrayList<GPXtrk> createGPXtrk(int n){
-		ArrayList<GPXtrk> ret = new ArrayList<GPXtrk>();
-		
-		//Create array list of tracks of size n
-		for(int i = 0; i < n; i++)
-			ret.add(new GPXtrk("Track number "+i,createGPXtrkseg(n)));
-		
-		return ret;
+	@Test
+	public void testNullGPXtrkptReturnsZeroBasic(){
+		ArrayList<GPXtrkpt> pts = new ArrayList<GPXtrkpt>();
+		pts.add(null);
+		ArrayList<GPXtrkseg> nullSegs = new ArrayList<GPXtrkseg>();
+		nullSegs.add(new GPXtrkseg(pts));
+		GPXtrk trk = new GPXtrk("TestTrack",nullSegs);
+		assertTrue("A track seg with a null point should return zero",
+				GPXcalculator.calculateDistanceTraveled(trk)==0);
 	}
+	
+	@Test
+	public void testNullGPXtrkptReturnsZeroStandard(){
+		ArrayList<GPXtrkpt> pts = new ArrayList<GPXtrkpt>();
+		pts.add(null);
+		segs.add(new GPXtrkseg(pts));
+		std = new GPXtrk("Track", segs);
+		assertTrue("The addition of a GPXtrkseg with null point should return zero",
+				GPXcalculator.calculateDistanceTraveled(std)==65);
+	}
+	
+	
 	
 	
 	/**
