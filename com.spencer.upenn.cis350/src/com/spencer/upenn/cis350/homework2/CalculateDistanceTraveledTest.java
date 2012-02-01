@@ -13,6 +13,7 @@ public class CalculateDistanceTraveledTest {
 
 	GPXtrk std = null;
 	ArrayList<GPXtrkseg> segs = null;
+	ArrayList<GPXtrkpt> ptsTest = null;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -39,12 +40,18 @@ public class CalculateDistanceTraveledTest {
 		segs.add(new GPXtrkseg(pts3));
 		
 		std = new GPXtrk("Track", segs);
+		
+		ArrayList<GPXtrkpt> ptsTest = new ArrayList<GPXtrkpt>();
+		ptsTest.add(new GPXtrkpt(90, 100, new Date()));
+		ptsTest.add(new GPXtrkpt(100, 100, new Date()));
+		ptsTest.add(new GPXtrkpt(130, 140, new Date()));
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		std=null;
 		segs = null;
+		ptsTest = null;
 	}
 
 	@Test
@@ -174,10 +181,10 @@ public class CalculateDistanceTraveledTest {
 	
 	@Test
 	public void testNullGPXtrkptReturnsZeroBasic(){
-		ArrayList<GPXtrkpt> pts = new ArrayList<GPXtrkpt>();
-		pts.add(null);
+		ptsTest = new ArrayList<GPXtrkpt>();
+		ptsTest.add(null);
 		ArrayList<GPXtrkseg> nullSegs = new ArrayList<GPXtrkseg>();
-		nullSegs.add(new GPXtrkseg(pts));
+		nullSegs.add(new GPXtrkseg(ptsTest));
 		GPXtrk trk = new GPXtrk("TestTrack",nullSegs);
 		assertTrue("A track seg with a null point should return zero",
 				GPXcalculator.calculateDistanceTraveled(trk)==0);
@@ -185,16 +192,93 @@ public class CalculateDistanceTraveledTest {
 	
 	@Test
 	public void testNullGPXtrkptReturnsZeroStandard(){
-		ArrayList<GPXtrkpt> pts = new ArrayList<GPXtrkpt>();
-		pts.add(null);
-		segs.add(new GPXtrkseg(pts));
+		ptsTest = new ArrayList<GPXtrkpt>();
+		ptsTest.add(null);
+		segs.add(new GPXtrkseg(ptsTest));
 		std = new GPXtrk("Track", segs);
 		assertTrue("The addition of a GPXtrkseg with null point should return zero",
 				GPXcalculator.calculateDistanceTraveled(std)==65);
 	}
 	
+	@Test
+	public void testNullGPXtrkptReturnsZeroAdvanced(){
+		ptsTest = new ArrayList<GPXtrkpt>();
+		ptsTest.add(null);
+		segs = createGPXtrkseg(5);
+		GPXtrk trk = new GPXtrk("Track", segs);
+		double distance = GPXcalculator.calculateDistanceTraveled(trk);
+		segs.add(new GPXtrkseg(ptsTest));
+		trk = new GPXtrk("Track", segs);
+		assertTrue("Distance should remain unchanged after addition of GPX trk" +
+				" seg containing a null point", 
+				distance==GPXcalculator.calculateDistanceTraveled(trk));
+	}
 	
+	@Test
+	public void testInvalidGPXtrkptLattitudePosReturnsZeroBasic(){
+		ptsTest = new ArrayList<GPXtrkpt>();
+		ptsTest.add(new GPXtrkpt(91, 150, new Date()));
+		ArrayList<GPXtrkseg> single = new ArrayList<GPXtrkseg>();
+		single.add(new GPXtrkseg(ptsTest));
+		GPXtrk trk = new GPXtrk("Track", single);
+		assertTrue("Segment with invalid positive lattitude should return zero", 
+				GPXcalculator.calculateDistanceTraveled(trk)==0);
+	}
 	
+	@Test
+	public void testInvalidGPXtrkptLattitudePosReturnZeroStandard(){
+		
+	}
+	
+	@Test
+	public void testInvalidGPXtrkptLattitudePosReturnZeroAdvanced(){
+		
+	}
+	
+	@Test
+	public void testInvalidGPXtrkptLattitudeNegReturnZeroBasic(){
+		
+	}
+	
+	@Test
+	public void testInvalidGPXtrkptLattitudeNegReturnZeroStandard(){
+		
+	}
+	
+	@Test
+	public void testInvalidGPXtrkptLattitudeNegReturnZeroAdvanced(){
+		
+	}
+	
+	@Test
+	public void testInvalidGPXtrkptLongitudePosReturnZeroBasic(){
+		
+	}
+	
+	@Test
+	public void testInvalidGPXtrkptLongitudePosReturnZeroStandard(){
+		
+	}
+	
+	@Test
+	public void testInvalidGPXtrkptLongitudePosReturnZeroAdvanced(){
+		
+	}
+	
+	@Test
+	public void testInvalidGPXtrkptLongitudeNegReturnZeroBasic(){
+		
+	}
+	
+	@Test
+	public void testInvalidGPXtrkptLongitudeNegReturnZeroStandard(){
+		
+	}
+	
+	@Test
+	public void testInvalidGPXtrkptLongitudeNegReturnZeroAdvanced(){
+		
+	}
 	
 	/**
 	 * Return an array list of track points of size n
