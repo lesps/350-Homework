@@ -357,7 +357,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
-	//A point with longitude < -180 should cause segment to return zero - against random values
+	//A point with longitude < -180 should cause segment to return zero - basic 
 	public void testInvalidGPXtrkptLongitudeNegReturnZeroAdvanced(){
 		ptsTest.add(new GPXtrkpt(80,-181, new Date()));
 		segs = createGPXtrkseg(5);
