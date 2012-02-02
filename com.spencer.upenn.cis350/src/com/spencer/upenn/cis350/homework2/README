@@ -1,0 +1,7 @@
+Please note that some of these tests will pass with the unimplemented version of the 
+GPXcalculator.calculateDistanceTraveled(GPXtrk trk) method. This is because it these
+tests (the 'advanced' series) generate random points for testing, and compare a distance
+calculated before versus distance after a particular test point is added. These tests should
+be taken in context with all the other JUnit tests developed, and not on their own. These tests
+look for advanced functionality in the method and should only be considered after basic and standard
+tests pass.
