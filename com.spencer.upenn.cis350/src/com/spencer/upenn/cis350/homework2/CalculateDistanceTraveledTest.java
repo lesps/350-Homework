@@ -55,6 +55,7 @@ public class CalculateDistanceTraveledTest {
 	}
 
 	@Test
+	//Be sure negative one is returned when GPXtrk is null 
 	public void testNullGPXtrkReturnsNegativeOne() {
 		GPXtrk nulltrk = null;
 		assertTrue("calculateDistanceTraveled should return -1 for a null trk", 
@@ -62,11 +63,14 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//Test functionality against hard-coded points
 	public void testFunctionalityStandard(){
 		assertTrue("Distance should be 65 for standard trk",
 				GPXcalculator.calculateDistanceTraveled(std)==65.0);
 	}
 	
+	@Test
+	//Test functionality works in a very basic case
 	public void testFunctionalityBasic(){
 		ArrayList<GPXtrkpt> pts = new ArrayList<GPXtrkpt>();
 		pts.add(new GPXtrkpt(90, 90, new Date()));
@@ -83,6 +87,7 @@ public class CalculateDistanceTraveledTest {
 	
 	
 	@Test
+	//Be sure an empty GPXtrk returns -1
 	public void testEmptyReturnsNegativeOne(){
 		ArrayList<GPXtrkseg> segs = new ArrayList<GPXtrkseg>();
 		GPXtrk emptytrk = new GPXtrk("Empty track", segs);
@@ -91,7 +96,8 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
-	public void testNullEntryDoesNotAffectDistanceBasic(){
+	//Be sure a null segment does not affect distance - base case
+	public void testNullSegmentDoesNotAffectDistanceBasic(){
 		ArrayList<GPXtrkseg> segs = new ArrayList<GPXtrkseg>();
 		segs.add(null);
 		GPXtrk track = new GPXtrk("Track", segs);
@@ -100,7 +106,8 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
-	public void testNullEntryDoesNotAffectDistanceStandard(){
+	//Be sure null segment does not affect distance - against hard coded points
+	public void testNullSegmentDoesNotAffectDistanceStandard(){
 		segs.add(null);
 		std = new GPXtrk("Track", segs);
 		assertTrue("The addition of an empty seg should still have dist 65",
@@ -108,7 +115,10 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
-	public void testNullEntryDoesNotAffectDistanceAdvanced(){
+	//Be sure null segment does not affect distance - against randomly generated values
+	//All 'advanced' tests yield true if distance is returned as one stagnant value (e.g. 0 all the time)
+	//These should only be considered after basic and standard tests pass
+	public void testNullSegmentDoesNotAffectDistanceAdvanced(){
 		ArrayList<GPXtrkseg> segs = createGPXtrkseg(5);
 		GPXtrk track = new GPXtrk("Track", segs);
 		double distance = GPXcalculator.calculateDistanceTraveled(track);
@@ -119,6 +129,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//Empty segment should not affect distance - basic case
 	public void testEmptyGPXtrksegReturnsZeroBasic(){
 		GPXtrkseg seg = new GPXtrkseg(new ArrayList<GPXtrkpt>());
 		ArrayList<GPXtrkseg> segs = new ArrayList<GPXtrkseg>();
@@ -129,6 +140,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//Empty segment should not affect distance - against hard coded values
 	public void testEmptyGPXtrksegReturnsZeroStandard(){
 		segs.add(new GPXtrkseg(new ArrayList<GPXtrkpt>()));
 		std = new GPXtrk("Track", segs);
@@ -137,6 +149,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//Empty segment should not affect distance - against randomly generated values
 	public void testEmptyGPXtrksegReturnsZeroAdvanced(){
 		ArrayList<GPXtrkseg> segs = createGPXtrkseg(5);
 		GPXtrk track = new GPXtrk("Track", segs);
@@ -148,6 +161,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//Segment with single segment should return zero - basic case
 	public void testGPXtrksegWithSinglePointReturnsZeroDistanceBasic(){
 		GPXtrkseg seg = new GPXtrkseg(createGPXtrkpt(1));
 		ArrayList<GPXtrkseg> segs = new ArrayList<GPXtrkseg>();
@@ -158,6 +172,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//Segment with single segment should return zero - against hard coded values
 	public void testGPXtrksegWithSinglePointReturnsZeroDistanceStandard(){
 		ArrayList<GPXtrkpt> pts = new ArrayList<GPXtrkpt>();
 		pts.add(new GPXtrkpt(50, 50, new Date()));
@@ -168,6 +183,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//Segment with single segment should return zero - against random values
 	public void testGPXtrksegWithSinglePointReturnsZeroDistanceAdvanced(){
 		ArrayList<GPXtrkseg> segs = createGPXtrkseg(5);
 		GPXtrk track = new GPXtrk("Track", segs);
@@ -180,6 +196,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//Null track point should cause segment to return zero distance - basic case
 	public void testNullGPXtrkptReturnsZeroBasic(){
 		ptsTest = new ArrayList<GPXtrkpt>();
 		ptsTest.add(null);
@@ -191,6 +208,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//Null track point should cause segment to return zero distance - against hard coded values
 	public void testNullGPXtrkptReturnsZeroStandard(){
 		ptsTest = new ArrayList<GPXtrkpt>();
 		ptsTest.add(null);
@@ -201,6 +219,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//Null track point should cause segment to return zero distance - against random values
 	public void testNullGPXtrkptReturnsZeroAdvanced(){
 		ptsTest = new ArrayList<GPXtrkpt>();
 		ptsTest.add(null);
@@ -215,6 +234,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//A point with a lattitude > 90 should cause segment to return zero - basic case
 	public void testInvalidGPXtrkptLattitudePosReturnsZeroBasic(){
 		ptsTest.add(new GPXtrkpt(91, 150, new Date()));
 		ArrayList<GPXtrkseg> single = new ArrayList<GPXtrkseg>();
@@ -225,6 +245,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//A point with a lattitude > 90 should cause segment to return zero - against hard coded values
 	public void testInvalidGPXtrkptLattitudePosReturnZeroStandard(){
 		ptsTest.add(new GPXtrkpt(91,150,new Date()));
 		segs.add(new GPXtrkseg(ptsTest));
@@ -234,6 +255,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//A point with a lattitude > 90 should cause segment to return zero - against random values
 	public void testInvalidGPXtrkptLattitudePosReturnZeroAdvanced(){
 		ptsTest.add(new GPXtrkpt(91,150, new Date()));
 		segs = createGPXtrkseg(5);
@@ -246,6 +268,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//A point with lattitude < -90 should cause segment to return zero - basic case
 	public void testInvalidGPXtrkptLattitudeNegReturnZeroBasic(){
 		ptsTest.add(new GPXtrkpt(-91, 150, new Date()));
 		ArrayList<GPXtrkseg> single = new ArrayList<GPXtrkseg>();
@@ -256,6 +279,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//A point with lattitude < -90 should cause segment to return zero - against hard coded values
 	public void testInvalidGPXtrkptLattitudeNegReturnZeroStandard(){
 		ptsTest.add(new GPXtrkpt(-91,150,new Date()));
 		segs.add(new GPXtrkseg(ptsTest));
@@ -265,6 +289,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//A point with lattitude < -90 should cause segment to return zero - against random values
 	public void testInvalidGPXtrkptLattitudeNegReturnZeroAdvanced(){
 		ptsTest.add(new GPXtrkpt(-91,150, new Date()));
 		segs = createGPXtrkseg(5);
@@ -277,6 +302,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//A point with longitude > 180 should cause segment to return zero - basic case
 	public void testInvalidGPXtrkptLongitudePosReturnZeroBasic(){
 		ptsTest.add(new GPXtrkpt(80, 181, new Date()));
 		ArrayList<GPXtrkseg> single = new ArrayList<GPXtrkseg>();
@@ -287,6 +313,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//A point with longitude > 180 should cause segment to return zero - against hard coded values
 	public void testInvalidGPXtrkptLongitudePosReturnZeroStandard(){
 		ptsTest.add(new GPXtrkpt(80,181,new Date()));
 		segs.add(new GPXtrkseg(ptsTest));
@@ -296,6 +323,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//A point with longitude > 180 should cause segment to return zero - against random values
 	public void testInvalidGPXtrkptLongitudePosReturnZeroAdvanced(){
 		ptsTest.add(new GPXtrkpt(80,181, new Date()));
 		segs = createGPXtrkseg(5);
@@ -308,6 +336,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//A point with longitude < -180 should cause segment to return zero - basic case
 	public void testInvalidGPXtrkptLongitudeNegReturnZeroBasic(){
 		ptsTest.add(new GPXtrkpt(80, -181, new Date()));
 		ArrayList<GPXtrkseg> single = new ArrayList<GPXtrkseg>();
@@ -318,6 +347,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//A point with longitude < -180 should cause segment to return zero - against hard coded values
 	public void testInvalidGPXtrkptLongitudeNegReturnZeroStandard(){
 		ptsTest.add(new GPXtrkpt(80,-181,new Date()));
 		segs.add(new GPXtrkseg(ptsTest));
@@ -327,6 +357,7 @@ public class CalculateDistanceTraveledTest {
 	}
 	
 	@Test
+	//A point with longitude < -180 should cause segment to return zero - against random values
 	public void testInvalidGPXtrkptLongitudeNegReturnZeroAdvanced(){
 		ptsTest.add(new GPXtrkpt(80,-181, new Date()));
 		segs = createGPXtrkseg(5);
