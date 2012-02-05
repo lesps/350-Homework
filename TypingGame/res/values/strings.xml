@@ -5,5 +5,19 @@
     <string name="app_name">TypingGame</string>
     <string name="Submit">Submit</string>
     <string name="Quit">Quit</string>
+    <string name="ex1">The herp derp derper is a powerful thing; derpidy derpidy doo.</string>
+
+    <string-array name="examples">
+        <item>Eat my shorts!</item>
+        <item>I wish I was dead!</item>
+        <item>Please let me rest!</item>
+        <item>Why oh my God, why?</item>
+    </string-array>
+
+    <string name="ready">Ready, wimp?</string>
+    <string name="yes">Fsck yea!</string>
+    <string name="again">Hit me up!</string>
+    <string name="correct">Super good job! Go again?</string>
+    <string name="incorrect">You failed pretty hard! Go again?</string>
 
 </resources>
