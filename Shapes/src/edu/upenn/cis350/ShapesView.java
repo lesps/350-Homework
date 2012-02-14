@@ -19,36 +19,26 @@ import android.util.Log;
  */
 
 abstract class Shape{
-
-	public abstract void draw(Paint paint, Canvas canvas);
-
-	public abstract void move(float x, float y);
-
-	public abstract boolean inBounds(float x, float y);
-
-	public abstract void setColor(int color);
-
-}
-
-class ColoredSquare extends Shape{
-
-	private int _color = 0;
 	private float _x1 = 0; 
 	private float _y1 = 0;
 	private float _x2 = 0;
 	private float _y2 = 0;
+	private int _color = 0;
 
-	public ColoredSquare(int color, float x1, float y1, float x2, float y2){
-		_color = color;
+	public abstract void draw(Paint paint, Canvas canvas);
+
+	public Shape(float x1, float y1, float x2, float y2, int color){
 		_x1 = x1;
-		_y1 = y1;
 		_x2 = x2;
+		_y1 = y1;
 		_y2 = y2;
+		_color = color;
 	}
-
-	public void draw(Paint paint, Canvas canvas){
-		paint.setColor(_color);
-		canvas.drawRect(_x1, _y1, _x2, _y2, paint);
+	public void move(float x, float y){
+		_x1 += x;
+		_y1 += y;
+		_x2 += x;
+		_y2 += y;
 	}
 
 	/**
@@ -63,22 +53,69 @@ class ColoredSquare extends Shape{
 		//Log.v("Rectangle", "Called");
 		return false;
 	}
+	
+	/**
+	 * Returns true if this shape intersects the other shape, false otherwise
+	 * @param other The shape to check intersection for
+	 * @return Whether this shape intersects the other or not
+	 */
+	public boolean intersects(Shape other){
+		if(other.getX1() >= _x1 && other.getX1() <= _x2)
+			return true;
+		else if(other.getX2() >= _x1 && other.getX2() <= _x2)
+			return true;
+		else if(other.getY1() >= _y1 && other.getY1() <= _y2)
+			return true;
+		else if(other.getY2() >= _y1 && other.getY2() <= _y2)
+			return true;
+		return false;
+	}
 
 	public void setColor(int color){
-		_color=color;
+		_color = color;
+	}
+	
+	public void setPosition(float x1, float x2, float y1, float y2){
+		_x1 = x1;
+		_x2 = x2;
+		_y1 = y1;
+		_y2 = y2;
+	}
+	
+	public float getX1(){
+		return _x1;
+	}
+	
+	public float getX2(){
+		return _x2;
+	}
+	
+	public float getY1(){
+		return _y1;
+	}
+	
+	public float getY2(){
+		return _y2;
+	}
+	
+	public int getColor(){
+		return _color;
+	}
+}
+
+class ColoredRectangle extends Shape{
+	
+
+	public ColoredRectangle(float x1, float y1, float x2, float y2, int color){
+		super(x1, y1, x2, y2, color);
 	}
 
-	/**
-	 * Moves the shape
-	 * @param x Difference in x
-	 * @param y Difference in y
-	 */
-	public void move(float x, float y){
-		_x1 += x;
-		_y1 += y;
-		_x2 += x;
-		_y2 += y;
+	public void draw(Paint paint, Canvas canvas){
+		paint.setColor(getColor());
+		canvas.drawRect(getX1(), getY1(), getX2(), getY2(), paint);
 	}
+
+	
 
 }
 public class ShapesView extends View {
@@ -86,15 +123,21 @@ public class ShapesView extends View {
 	private ArrayList<Shape> _shapes = new ArrayList<Shape>();
 	private float _lastX=-1;
 	private float _lastY=-1;
+	private float _originalX1 = -1;
+	private float _originalY1 = -1;
+	private float _originalX2 = -1;
+	private float _originalY2 = -1;
 	private Shape shape= null;
 	// you must implement these constructors!!
 	public ShapesView(Context c) {
 		super(c);
-		_shapes.add(new ColoredSquare(Color.BLUE, 50, 50, 100, 100));
+		_shapes.add(new ColoredRectangle(50, 50, 100, 100, Color.BLUE));
+		_shapes.add(new ColoredRectangle(150, 150, 200, 200, Color.BLUE));
 	}
 	public ShapesView(Context c, AttributeSet a) {
 		super(c, a);
-		_shapes.add(new ColoredSquare(Color.BLUE, 50, 50, 100, 100));
+		_shapes.add(new ColoredRectangle(50, 50, 100, 100, Color.BLUE));
+		_shapes.add(new ColoredRectangle(150, 150, 200, 200, Color.BLUE));
 	}
 
 	// This method is called when the View is displayed
@@ -138,6 +181,10 @@ public class ShapesView extends View {
 			for(int i = 0; i < _shapes.size(); i++){
 				if(_shapes.get(i).inBounds(x, y)){
 					shape = _shapes.get(i);
+					_originalX1 = shape.getX1();
+					_originalX2 = shape.getX2();
+					_originalY1 = shape.getY1();
+					_originalY2 = shape.getY2();
 					break;
 				}
 			}
@@ -151,6 +198,14 @@ public class ShapesView extends View {
 			shape.setColor(Color.BLUE);
 			_lastX=-1;
 			_lastY=-1;
+			for(int i = 0; i < _shapes.size(); i++){
+				if(_shapes.get(i) == shape)
+					continue;
+				if(_shapes.get(i).intersects(shape)){
+					shape.setPosition(_originalX1, _originalX2, _originalY1, _originalY2);
+					break;
+				}
+			}
 			shape = null;
 		}
 		else if(event.getAction() == MotionEvent.ACTION_MOVE){
