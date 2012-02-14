@@ -47,8 +47,13 @@ public class TypingGameActivity extends Activity {
     	else if (id == CORRECT_DIALOG) {
 	    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
             // this is the message to display
-    	builder.setMessage("Super good job!" + " That took you " + totalTime + " seconds!" + 
-    			" Your best time is " + bestTime + " seconds."); 
+	    	String msg = "";
+	    	if(bestTime==0)
+	    		msg = "Super good job!" + " That took you " + totalTime + " seconds!";
+	    	else
+	    		msg = "Super good job!" + " That took you " + totalTime + " seconds!" + 
+    			" Your best time is " + bestTime + " seconds.";
+    	builder.setMessage(msg); 
             // this is the button to display
     	builder.setPositiveButton(R.string.again,
     		new DialogInterface.OnClickListener() {
@@ -85,15 +90,18 @@ public class TypingGameActivity extends Activity {
     	TextView text = (TextView) findViewById(R.id.typingText);
     	if(box.getText().toString().equals(text.getText().toString())){
     		totalTime = (System.currentTimeMillis() - startTime)/1000;
-    		if(bestTime==0||totalTime<bestTime)
+    		if(totalTime<bestTime)
     			bestTime=totalTime;
     		removeDialog(CORRECT_DIALOG);
     		showDialog(CORRECT_DIALOG);
+    		if(bestTime==0)
+    			bestTime=totalTime;
     	}
     	else{
     		removeDialog(INCORRECT_DIALOG);
     		showDialog(INCORRECT_DIALOG);
     	}
+    	box.setText("");
     }
     
     public void onQuit(View view){
