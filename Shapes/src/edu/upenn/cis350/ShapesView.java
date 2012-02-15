@@ -60,14 +60,25 @@ abstract class Shape{
 	 * @return Whether this shape intersects the other or not
 	 */
 	public boolean intersects(Shape other){
-		if(other.getX1() >= _x1 && other.getX1() <= _x2)
+		if(inBounds(other.getX1(), other.getY1()))
 			return true;
-		else if(other.getX2() >= _x1 && other.getX2() <= _x2)
+		else if(inBounds(other.getX2(), other.getY2()))
 			return true;
-		else if(other.getY1() >= _y1 && other.getY1() <= _y2)
+		else if(inBounds(other.getX1(), other.getY2()))
 			return true;
-		else if(other.getY2() >= _y1 && other.getY2() <= _y2)
+		else if(inBounds(other.getX2(), other.getY1()))
 			return true;
+		else if(other.inBounds(this.getX1(), this.getY1()))
+			return true;
+		else if(other.inBounds(this.getX2(), this.getY2()))
+			return true;
+		else if(other.inBounds(this.getX1(), this.getY2()))
+			return true;
+		else if(other.inBounds(this.getX2(), this.getY1()))
+			return true;
+		
+		
+		
 		return false;
 	}
 
@@ -130,43 +141,26 @@ public class ShapesView extends View {
 	private Shape shape= null;
 	// you must implement these constructors!!
 	public ShapesView(Context c) {
-		super(c);
+		super(c);W
 		_shapes.add(new ColoredRectangle(50, 50, 100, 100, Color.BLUE));
-		_shapes.add(new ColoredRectangle(150, 150, 200, 200, Color.BLUE));
+		_shapes.add(new ColoredRectangle(150, 150, 300, 300, Color.BLUE));
 	}
 	public ShapesView(Context c, AttributeSet a) {
 		super(c, a);
 		_shapes.add(new ColoredRectangle(50, 50, 100, 100, Color.BLUE));
-		_shapes.add(new ColoredRectangle(150, 150, 200, 200, Color.BLUE));
+		_shapes.add(new ColoredRectangle(150, 150, 300, 300, Color.BLUE));
 	}
 
 	// This method is called when the View is displayed
 	protected void onDraw(Canvas canvas) {
 
-
 		// this is the "paintbrush"
 		Paint paint = new Paint();
-		// set the color
-		//paint.setColor(Color.BLUE);
-
-		// draw Rectangle with corners at (40, 20) and (90, 80)
-		//canvas.drawRect(50, 50, 100, 100, paint);
+		
 		for(int i = 0; i < _shapes.size(); i++){
 			_shapes.get(i).draw(paint, canvas);
 		}
 
-		/**
-		// change the color
-		paint.setColor(Color.BLUE);
-		// set a shadow
-		paint.setShadowLayer(10, 10, 10, Color.GREEN);
-
-
-		// create a bounding rectangle
-		RectF rect = new RectF(150, 150, 280, 280);
-		// draw an oval in the bounding rectangle
-		canvas.drawOval(rect, paint);
-		 **/
 	} 
 
 	public boolean onTouchEvent(MotionEvent event){
