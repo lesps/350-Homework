@@ -141,7 +141,7 @@ public class ShapesView extends View {
 	private Shape shape= null;
 	// you must implement these constructors!!
 	public ShapesView(Context c) {
-		super(c);W
+		super(c);
 		_shapes.add(new ColoredRectangle(50, 50, 100, 100, Color.BLUE));
 		_shapes.add(new ColoredRectangle(150, 150, 300, 300, Color.BLUE));
 	}
