@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-<edu.upenn.cis350.ShapesView 
-    android:layout_width="fill_parent" 
-    android:layout_height="fill_parent" 
-    android:layout_weight="1"
- />
+    android:orientation="vertical" >
+
+    <edu.upenn.cis350.ShapesView
+        android:id="@+id/shapeView"
+        android:layout_width="wrap_content"
+        android:layout_height="365dp"
+        android:layout_weight="0.40" />
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.40"
+        android:onClick="onContinueClick"
+        android:text="Button" />
+
 </LinearLayout>

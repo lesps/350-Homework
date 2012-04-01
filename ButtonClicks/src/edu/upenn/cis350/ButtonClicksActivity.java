@@ -20,5 +20,6 @@ public class ButtonClicksActivity extends Activity {
     	TextView text = (TextView) findViewById(R.id.count);
     	
     	text.setText(new Integer(++count).toString());
+    	
     }
 }

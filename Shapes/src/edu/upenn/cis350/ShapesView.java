@@ -131,6 +131,7 @@ class ColoredRectangle extends Shape{
 }
 public class ShapesView extends View {
 	private final String DEV_TAG="ShapesView";
+	public static final String DEBUG = "SHAPE";
 	private ArrayList<Shape> _shapes = new ArrayList<Shape>();
 	private float _lastX=-1;
 	private float _lastY=-1;
@@ -149,6 +150,10 @@ public class ShapesView extends View {
 		super(c, a);
 		_shapes.add(new ColoredRectangle(50, 50, 100, 100, Color.BLUE));
 		_shapes.add(new ColoredRectangle(150, 150, 300, 300, Color.BLUE));
+	}
+	
+	public void poop(){
+		Log.v(DEBUG,"I love poop");
 	}
 
 	// This method is called when the View is displayed
