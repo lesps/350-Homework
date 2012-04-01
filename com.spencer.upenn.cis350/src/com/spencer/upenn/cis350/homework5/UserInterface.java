@@ -7,23 +7,72 @@ public class UserInterface {
 
 	public static final String DATAFILE = "WorldSeries.csv";
 	
+	public static void printIntroduction(){
+		System.out.println("Welcome to the World Series database!");
+		System.out.println("");
+		System.out.println("Please make your selection:");
+		System.out.println("1: Search for World Series info by year");
+		System.out.println("2: Search for World Series info by team");
+		System.out.println("3: Show all World Series for a range of years");
+		System.out.println("4: Show all teams' World Series wins");
+		System.out.println("Q: Quit");
+		System.out.print("> ");
+	}
 	
+	public static void searchByYear(Scanner in){
+		System.out.print("Please enter the year: ");
+		try {
+			int year = in.nextInt();
+			String yearData = showDataForYear(year);
+			System.out.println(yearData);
+		}
+		catch (Exception e) { 
+			System.out.println("That is not a valid year.");
+		}
+	}
+	
+	public static void searchByTeam(Scanner in){
+		System.out.print("Please enter the team name: ");
+		String team = in.nextLine();
+		System.out.print("Do you want to see World Series the team has (W)on, (L)ost, or (A)ll? ");
+		String which = in.next();
+		String teamData = showDataForTeam(team, which);	
+		System.out.println(teamData);
+	}
+	
+	public static void searchByYearRange(Scanner in){
+		int startYear, endYear;
+		System.out.print("Please enter the starting year: ");
+		try {
+			startYear = in.nextInt();
+		}
+		catch (Exception e) { 
+			System.out.println("That is not a valid year.");
+			return;
+		}
+		System.out.print("Please enter the ending year: ");
+		try {
+			endYear = in.nextInt();
+		}
+		catch (Exception e) { 
+			System.out.println("That is not a valid year.");
+			return;
+		}
+		String yearData = showDataForRange(startYear, endYear);
+		System.out.println(yearData);
+	}
+	
+	public static void printSortedTeams(){
+		String result = Sorter.sortByWinners();
+		System.out.println(Sorter.sortByWinners());
+	}
 	
 	public static void main(String[] args) {
 		
-		System.out.println("Welcome to the World Series database!");
-
+		printIntroduction();
 		String choice = null; // the thing that the user chooses to do
 		
 		do {
-			System.out.println("");
-			System.out.println("Please make your selection:");
-			System.out.println("1: Search for World Series info by year");
-			System.out.println("2: Search for World Series info by team");
-			System.out.println("3: Show all World Series for a range of years");
-			System.out.println("4: Show all teams' World Series wins");
-			System.out.println("Q: Quit");
-			System.out.print("> ");
 			
 			Scanner in = new Scanner(System.in);
 			
@@ -34,52 +83,16 @@ public class UserInterface {
 				
 				switch(choiceNum) {
 				case 1: 
-					// if they want to search by year
-					System.out.print("Please enter the year: ");
-					try {
-						int year = in.nextInt();
-						String yearData = showDataForYear(year);
-						System.out.println(yearData);
-					}
-					catch (Exception e) { 
-						System.out.println("That is not a valid year.");
-					}
+					searchByYear(in);
 					break;
 				case 2:
-					// search by team
-					System.out.print("Please enter the team name: ");
-					String team = in.nextLine();
-					System.out.print("Do you want to see World Series the team has (W)on, (L)ost, or (A)ll? ");
-					String which = in.next();
-					String teamData = showDataForTeam(team, which);	
-					System.out.println(teamData);
+					searchByTeam(in);
 					break;
 				case 3:
-					// for a range of years
-					int startYear, endYear;
-					System.out.print("Please enter the starting year: ");
-					try {
-						startYear = in.nextInt();
-					}
-					catch (Exception e) { 
-						System.out.println("That is not a valid year.");
-						break;
-					}
-					System.out.print("Please enter the ending year: ");
-					try {
-						endYear = in.nextInt();
-					}
-					catch (Exception e) { 
-						System.out.println("That is not a valid year.");
-						break;
-					}
-					String yearData = showDataForRange(startYear, endYear);
-					System.out.println(yearData);
+					searchByYearRange(in);
 					break;
 				case 4:
-					// show all the teams and the years they won a World Series
-					String result = new Sorter().winners();
-					System.out.println(result);
+					printSortedTeams();
 					break;
 				default:
 					// they entered a number but not a valid one
@@ -94,7 +107,7 @@ public class UserInterface {
 			}
 			
 		}
-		while (choice.equals("Q") == false && choice.equals("q") == false);
+		while (!(choice.equalsIgnoreCase("q")));
 		System.out.println("Good bye");
 	}
 
@@ -105,9 +118,9 @@ public class UserInterface {
 		// look through all the instances
 		ArrayList<WorldSeriesInstance> list = ds.allInstances();
 		for (WorldSeriesInstance wsi : list) {
-			if (wsi.year() == year) {
+			if (wsi.getYear() == year) {
 				// found it!
-				return "In " + year + " the " + wsi.winner() + " defeated the " + wsi.loser() + " by " + wsi.score();
+				return "In " + year + " the " + wsi.getWinner() + " defeated the " + wsi.getLoser() + " by " + wsi.getScore();
 			}
 		}
 		
@@ -132,9 +145,9 @@ public class UserInterface {
 		// look through all the instances
 		ArrayList<WorldSeriesInstance> list = ds.allInstances();
 		for (WorldSeriesInstance wsi : list) {
-			if (wsi.year() >= start && wsi.year() <= end) {
+			if (wsi.getYear() >= start && wsi.getYear() <= end) {
 				// found it!
-				result.append("In " + wsi.year() + " the " + wsi.winner() + " defeated the " + wsi.loser() + " by " + wsi.score());
+				result.append("In " + wsi.getYear() + " the " + wsi.getWinner() + " defeated the " + wsi.getLoser() + " by " + wsi.getScore());
 				result.append("\n");
 				x++;
 			}
@@ -165,9 +178,9 @@ public class UserInterface {
 			ArrayList<WorldSeriesInstance> list = ds.allInstances();
 			for (WorldSeriesInstance wsi : list) {
 				// convert to uppercase and use "contains" for partial matching
-				if (wsi.winner().toUpperCase().contains(team.toUpperCase())) {
+				if (wsi.getWinner().toUpperCase().contains(team.toUpperCase())) {
 					// we found an instance when the team won
-					result.append("In " + wsi.year() + " the " + wsi.winner() + " defeated the " + wsi.loser() + " by " + wsi.score());
+					result.append("In " + wsi.getYear() + " the " + wsi.getWinner() + " defeated the " + wsi.getLoser() + " by " + wsi.getScore());
 					result.append("\n");
 					m++;
 				}
@@ -191,8 +204,8 @@ public class UserInterface {
 			ArrayList<WorldSeriesInstance> list = ds.allInstances();
 			for (WorldSeriesInstance wsi : list) {
 				// convert to uppercase and use "contains" for partial matching
-				if (wsi.loser().toUpperCase().contains(team.toUpperCase())) {
-					result.append("In " + wsi.year() + " the " + wsi.loser() + " lost to the " + wsi.winner() + " by " + wsi.score());
+				if (wsi.getLoser().toUpperCase().contains(team.toUpperCase())) {
+					result.append("In " + wsi.getYear() + " the " + wsi.getLoser() + " lost to the " + wsi.getWinner() + " by " + wsi.getScore());
 					result.append("\n");
 					m++;
 				}
@@ -217,14 +230,14 @@ public class UserInterface {
 			ArrayList<WorldSeriesInstance> list = ds.allInstances();
 			for (WorldSeriesInstance wsi : list) {
 				// convert to uppercase and use "contains" for partial matching
-				if (wsi.winner().toUpperCase().contains(team.toUpperCase())) {
+				if (wsi.getWinner().toUpperCase().contains(team.toUpperCase())) {
 					// we found an instance when the team won
-					result.append("In " + wsi.year() + " the " + wsi.winner() + " defeated the " + wsi.loser() + " by " + wsi.score());
+					result.append("In " + wsi.getYear() + " the " + wsi.getWinner() + " defeated the " + wsi.getLoser() + " by " + wsi.getScore());
 					result.append("\n");
 					a++;
 				}
-				else if (wsi.loser().toUpperCase().contains(team.toUpperCase())) {
-					result.append("In " + wsi.year() + " the " + wsi.loser() + " lost to the " + wsi.winner() + " by " + wsi.score());
+				else if (wsi.getLoser().toUpperCase().contains(team.toUpperCase())) {
+					result.append("In " + wsi.getYear() + " the " + wsi.getLoser() + " lost to the " + wsi.getWinner() + " by " + wsi.getScore());
 					result.append("\n");
 					b++;
 				}

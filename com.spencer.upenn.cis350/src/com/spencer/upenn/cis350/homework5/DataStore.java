@@ -6,12 +6,8 @@ import java.util.Scanner;
 public class DataStore {
 	
 	private final String _fileName;
-	private boolean _initialized = false;
 	private ArrayList<WorldSeriesInstance> _list;
-	
-	int y;
-	String w, l, s;
-	
+		
 	public DataStore(String fileName) {
 		_fileName = fileName;
 		_list = new ArrayList<WorldSeriesInstance>();
@@ -29,10 +25,10 @@ public class DataStore {
 			
 			// read each line of the file one at a time
 			while (in.hasNext()) {
-				y = in.nextInt();
-				w = in.next();
-				s = in.next();
-				l = in.nextLine();
+				int y = in.nextInt();
+				String w = in.next();
+				String s = in.next();
+				String l = in.nextLine();
 				// the loser still has the leading comma attached, so get rid of it
 				l = l.substring(1, l.length());
 				//System.out.println(year + ": " + winner + " beat " + loser + " by " + score);
@@ -43,9 +39,6 @@ public class DataStore {
 				// add it to the ArrayList
 				_list.add(wsi);
 			}
-			
-			// if we made it here, we successfully initialized
-			_initialized = true;
 		}
 		catch (Exception e) {
 			e.printStackTrace();

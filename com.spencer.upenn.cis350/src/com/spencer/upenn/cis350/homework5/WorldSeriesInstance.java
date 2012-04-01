@@ -20,9 +20,9 @@ public class WorldSeriesInstance {
 		_score = score;
 	}
 	
-	public int year() { return _year; }
-	public String winner() { return _winner; }
-	public String loser() { return _loser; }
-	public String score() { return _score; }
+	public int getYear() { return _year; }
+	public String getWinner() { return _winner; }
+	public String getLoser() { return _loser; }
+	public String getScore() { return _score; }
 
 }

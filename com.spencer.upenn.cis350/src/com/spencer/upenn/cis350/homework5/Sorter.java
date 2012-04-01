@@ -7,7 +7,7 @@ public class Sorter {
 	/*
 	 * Show all of the World Series results, sorted by the winning team
 	 */
-	public String winners() {
+	public static String sortByWinners() {
 		DataStore ds = new DataStore(UserInterface.DATAFILE);
 		
 		// to hold the return value
@@ -31,21 +31,21 @@ public class Sorter {
 		for (WorldSeriesInstance wsi : list) {
 
 			// see if the winner is already in the list of teams
-			int teamsIndex = teams.indexOf(wsi.winner());
+			int teamsIndex = teams.indexOf(wsi.getWinner());
 			
 			// if it's -1, then we haven't seen this team before
 			if (teamsIndex == -1) {
 				// add it to the list of teams
-				teams.add(wsi.winner());
+				teams.add(wsi.getWinner());
 				// create an entry in the wins list
 				ArrayList<Integer> newEntry = new ArrayList<Integer>();
-				newEntry.add(wsi.year());
+				newEntry.add(wsi.getYear());
 				wins.add(newEntry);
 			}
 			// if it's not -1, then we've already seen this team
 			else {
 				// so just update the corresponding entry in wins
-				wins.get(teamsIndex).add(wsi.year());
+				wins.get(teamsIndex).add(wsi.getYear());
 			}
 		}
 		

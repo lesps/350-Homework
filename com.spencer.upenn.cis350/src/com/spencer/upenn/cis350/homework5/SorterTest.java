@@ -13,7 +13,7 @@ public class SorterTest {
 
 	@Test
 	public void test() {
-		String result = new Sorter().winners();
+		String result = new Sorter().sortByWinners();
 		
 		String expectedResult = "Anaheim Angels: 2002\n" +
 				"Arizona Diamondbacks: 2001\n" +
