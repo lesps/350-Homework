@@ -7,13 +7,15 @@ import org.junit.Test;
 
 public class ShowDataForTeamTest {
 
+	private DataStore ds;
 	@Before
 	public void setUp() throws Exception {
+		ds = new DataStore(UserInterface.DATAFILE);
 	}
 
 	@Test
 	public void testRedSoxWins() {
-		String result = UserInterface.showDataForTeam("Red Sox", "W");
+		String result = ds.showDataForTeam("Red Sox", "W");
 
 		String expectedResult = "In 1912 the Boston Red Sox defeated the New York Giants by 4-3\n" +
 			"In 1915 the Boston Red Sox defeated the Philadelphia Phillies by 4-1\n" +
@@ -29,7 +31,7 @@ public class ShowDataForTeamTest {
 	
 	@Test
 	public void testYankeesLosses() {
-		String result = UserInterface.showDataForTeam("YANKEES", "l");
+		String result = ds.showDataForTeam("YANKEES", "l");
 
 		String expectedResult = "In 1921 the New York Yankees lost to the New York Giants by 5-3\n" +
 				"In 1922 the New York Yankees lost to the New York Giants by 4-0\n" + 
@@ -51,7 +53,7 @@ public class ShowDataForTeamTest {
 	
 	@Test
 	public void testPhilliesAll() {
-		String result = UserInterface.showDataForTeam("Philadelphia Phillies", "A");
+		String result = ds.showDataForTeam("Philadelphia Phillies", "A");
 	
 		String expectedResult = "In 1915 the Philadelphia Phillies lost to the Boston Red Sox by 4-1\n" +
 				"In 1950 the Philadelphia Phillies lost to the New York Yankees by 4-0\n" +
@@ -68,7 +70,7 @@ public class ShowDataForTeamTest {
 
 	@Test
 	public void testNoWorldSeries() {
-		String result = UserInterface.showDataForTeam("Seattle Mariners", "A");
+		String result = ds.showDataForTeam("Seattle Mariners", "A");
 
 		String expectedResult = "The Seattle Mariners have not played in any World Series\n";
 		
@@ -77,7 +79,7 @@ public class ShowDataForTeamTest {
 
 	@Test
 	public void testBadChoice() {
-		String result = UserInterface.showDataForTeam("Yankees", "K");
+		String result = ds.showDataForTeam("Yankees", "K");
 
 		String expectedResult = "\"K\" is not a valid entry.";
 		

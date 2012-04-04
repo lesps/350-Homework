@@ -7,13 +7,15 @@ import org.junit.Test;
 
 public class ShowDataForRangeTest {
 
+	private DataStore ds;
 	@Before
 	public void setUp() throws Exception {
+		ds = new DataStore(UserInterface.DATAFILE);
 	}
 
 	@Test
 	public void test2004to2007() {
-		String result = UserInterface.showDataForRange(2004, 2007);
+		String result = ds.showDataForRange(2004, 2007);
 		
 		String expectedResult = "In 2004 the Boston Red Sox defeated the St. Louis Cardinals by 4-0\n" +
 				"In 2005 the Chicago White Sox defeated the Houston Astros by 4-0\n" +
@@ -25,7 +27,7 @@ public class ShowDataForRangeTest {
 
 	@Test
 	public void test1990to1999() {
-		String result = UserInterface.showDataForRange(1990, 1999);
+		String result = ds.showDataForRange(1990, 1999);
 		
 		String expectedResult = "In 1990 the Cincinnati Reds defeated the Oakland Athletics by 4-0\n" +
 				"In 1991 the Minnesota Twins defeated the Atlanta Braves by 4-3\n" +
@@ -42,7 +44,7 @@ public class ShowDataForRangeTest {
 
 	@Test
 	public void testBadRange() {
-		String result = UserInterface.showDataForRange(2000, 1999);
+		String result = ds.showDataForRange(2000, 1999);
 		
 		String expectedResult = "Invalid year range";
 		
@@ -51,7 +53,7 @@ public class ShowDataForRangeTest {
 
 	@Test
 	public void testEmptyRange() {
-		String result = UserInterface.showDataForRange(1700, 1800);
+		String result = ds.showDataForRange(1700, 1800);
 		
 		String expectedResult = "No World Series held between 1700 and 1800";
 		

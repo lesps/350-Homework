@@ -13,7 +13,8 @@ public class SorterTest {
 
 	@Test
 	public void test() {
-		String result = new Sorter().sortByWinners();
+		DataStore db = new DataStore(UserInterface.DATAFILE);
+		String result = db.sortByWinners();
 		
 		String expectedResult = "Anaheim Angels: 2002\n" +
 				"Arizona Diamondbacks: 2001\n" +

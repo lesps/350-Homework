@@ -20,6 +20,11 @@ public class WorldSeriesInstance {
 		_score = score;
 	}
 	
+	@Override 
+	public String toString(){
+		return "In " + _year + " the " + _winner + " defeated the " + _loser + " by " + _score;
+	}
+	
 	public int getYear() { return _year; }
 	public String getWinner() { return _winner; }
 	public String getLoser() { return _loser; }
