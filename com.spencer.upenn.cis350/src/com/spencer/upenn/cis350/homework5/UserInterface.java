@@ -6,7 +6,8 @@ import java.util.Scanner;
 public class UserInterface {
 
 	public static final String DATAFILE = "WorldSeries.csv";
-	public static DataStore ds;
+	private static DataViewer _dv;
+	private static DataSorter _ds;
 	
 	public static void printIntroduction(){
 		System.out.println("Welcome to the World Series database!");
@@ -24,7 +25,7 @@ public class UserInterface {
 		System.out.print("Please enter the year: ");
 		try {
 			int year = in.nextInt();
-			String yearData = ds.showDataForYear(year);
+			String yearData = _dv.showDataForYear(year);
 			System.out.println(yearData);
 		}
 		catch (Exception e) { 
@@ -37,7 +38,7 @@ public class UserInterface {
 		String team = in.nextLine();
 		System.out.print("Do you want to see World Series the team has (W)on, (L)ost, or (A)ll? ");
 		String which = in.next();
-		String teamData = ds.showDataForTeam(team, which);	
+		String teamData = _dv.showDataForTeam(team, which);	
 		System.out.println(teamData);
 	}
 	
@@ -59,12 +60,12 @@ public class UserInterface {
 			System.out.println("That is not a valid year.");
 			return;
 		}
-		String yearData = ds.showDataForRange(startYear, endYear);
+		String yearData = _dv.showDataForRange(startYear, endYear);
 		System.out.println(yearData);
 	}
 	
 	public static void printSortedTeams(){
-		String result = ds.sortByWinners();
+		String result = _ds.sortByWinners();
 		System.out.println(result);
 	}
 	
@@ -72,7 +73,9 @@ public class UserInterface {
 		
 		printIntroduction();
 		String choice = null; // the thing that the user chooses to do
-		ds = new DataStore(DATAFILE);
+		DataStore ds = new DataStore(DATAFILE);
+		_ds = new DataSorter(ds); 
+		_dv = new DataViewer(ds);
 		do {
 			
 			Scanner in = new Scanner(System.in);

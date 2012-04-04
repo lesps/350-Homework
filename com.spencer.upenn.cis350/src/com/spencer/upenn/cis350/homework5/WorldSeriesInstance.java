@@ -20,10 +20,15 @@ public class WorldSeriesInstance {
 		_score = score;
 	}
 	
-	@Override 
-	public String toString(){
+	public String printLoss(){
+		return "In " + _year + " the " + _loser +
+							" lost to the " + _winner + " by " + _score;
+	}
+	
+	public String printWin(){
 		return "In " + _year + " the " + _winner + " defeated the " + _loser + " by " + _score;
 	}
+	
 	
 	public int getYear() { return _year; }
 	public String getWinner() { return _winner; }

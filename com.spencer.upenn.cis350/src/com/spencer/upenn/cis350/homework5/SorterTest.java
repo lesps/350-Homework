@@ -14,7 +14,8 @@ public class SorterTest {
 	@Test
 	public void test() {
 		DataStore db = new DataStore(UserInterface.DATAFILE);
-		String result = db.sortByWinners();
+		DataSorter ds = new DataSorter(db);
+		String result = ds.sortByWinners();
 		
 		String expectedResult = "Anaheim Angels: 2002\n" +
 				"Arizona Diamondbacks: 2001\n" +
